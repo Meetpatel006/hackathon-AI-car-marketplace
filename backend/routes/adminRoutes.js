@@ -6,6 +6,7 @@ const {
   getAnalytics,
   getAllCars,
   getAllUsers,
+  getAllTestDrives,
 } = require('../controllers/adminController');
 
 // Define the API endpoints for the admin dashboard.
@@ -14,5 +15,6 @@ const {
 router.get('/analytics', protect, admin, getAnalytics);
 router.get('/cars', protect, admin, getAllCars);
 router.get('/users', protect, admin, getAllUsers);
+router.get('/testdrives', protect, admin, getAllTestDrives);
 
 module.exports = router;

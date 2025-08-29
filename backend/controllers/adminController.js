@@ -8,18 +8,23 @@ const TestDrive = require('../models/testDriveModel');
 const getAnalytics = async (req, res) => {
   try {
     const totalUsers = await User.countDocuments();
-    const totalCars = await Car.countDocuments();
+    const totalCarListings = await Car.countDocuments();
     const totalTestDrives = await TestDrive.countDocuments();
 
-    const bookedSlots = await TestDrive.find({ status: 'booked' }).populate('user', 'name').populate('car', 'make model year');
+    const recentTestDrives = await TestDrive.find()
+      .sort({ createdAt: -1 })
+      .limit(5)
+      .populate('user', 'name')
+      .populate('car', 'make model year');
 
     res.status(200).json({
       totalUsers,
-      totalCars,
+      totalCarListings,
       totalTestDrives,
-      bookedSlots,
+      recentTestDrives,
     });
   } catch (error) {
+    console.error('Analytics error:', error);
     res.status(500).json({ message: 'Failed to retrieve analytics' });
   }
 };
@@ -40,8 +45,23 @@ const getAllUsers = async (req, res) => {
   res.status(200).json(users);
 };
 
+// @desc    Get all test drives (for admin review)
+// @route   GET /api/admin/testdrives
+// @access  Private (Admin only)
+const getAllTestDrives = async (req, res) => {
+  try {
+    const testDrives = await TestDrive.find({})
+      .populate('user', 'name email')
+      .populate('car', 'make model year');
+    res.status(200).json(testDrives);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to retrieve test drives' });
+  }
+};
+
 module.exports = {
   getAnalytics,
   getAllCars,
   getAllUsers,
+  getAllTestDrives,
 };
