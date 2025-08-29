@@ -317,7 +317,7 @@ export default function DashboardPage() {
                               {testDrive.car.make} {testDrive.car.model} {testDrive.car.year}
                             </p>
                             <p className="text-sm text-muted-foreground">
-                              {formatDate(testDrive.date)} at {formatTime(testDrive.time)}
+                              {formatDate(testDrive.date)} 
                             </p>
                           </div>
                         </div>
@@ -401,7 +401,7 @@ export default function DashboardPage() {
                                 {testDrive.car.make} {testDrive.car.model} {testDrive.car.year}
                               </h4>
                               <p className="text-sm text-muted-foreground">
-                                Scheduled for {formatDate(testDrive.date)} at {formatTime(testDrive.time)}
+                                Scheduled for {formatDate(testDrive.date)} 
                               </p>
                               <p className="text-xs text-muted-foreground">
                                 Booked on {formatDate(testDrive.createdAt)}

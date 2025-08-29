@@ -31,7 +31,7 @@ const registerUser = async (req, res) => {
     });
     res.cookie('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV !== 'development', // Use secure cookies in production
+      secure: NODE_ENV !== 'development', // Use secure cookies in production
       sameSite: 'strict', // Prevent CSRF attacks
       maxAge: 24 * 60 * 60 * 1000, // 1 day
     });
@@ -64,9 +64,11 @@ const loginUser = async (req, res) => {
     });
     res.cookie('token', token, {
       httpOnly: true,
-      secure: NODE_ENV !== 'development',
+      secure: NODE_ENV === 'production',
       sameSite: 'strict',
-      maxAge: 24 * 60 * 60 * 1000,
+      path: '/',
+      domain: NODE_ENV === 'development' ? 'localhost' : '.yourwebsite.com',
+      maxAge: 3600000, // Example expiry
     });
 
     res.json({
@@ -86,10 +88,14 @@ const loginUser = async (req, res) => {
 // @route   GET /api/auth/logout
 // @access  Private
 const logoutUser = (req, res) => {
-  res.cookie('jwt', '', {
-    httpOnly: true,
-    expires: new Date(0), // Clear the cookie by setting an expired date
-  });
+  res.cookie('token', '', {
+  httpOnly: true,
+  expires: new Date(0), 
+  secure: NODE_ENV === 'production',
+  sameSite: 'strict',
+  path: '/',
+  domain: NODE_ENV === 'development' ? 'localhost' : '.yourwebsite.com',
+});
   res.status(200).json({ message: 'Logged out successfully' });
 };
 

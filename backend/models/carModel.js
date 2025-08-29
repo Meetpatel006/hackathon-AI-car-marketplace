@@ -29,7 +29,7 @@ const carSchema = mongoose.Schema(
     },
     condition: {
       type: String,
-      enum: ['New', 'Used', 'Certified Pre-Owned','Fair','Excellent','Poor','Good'],
+      enum: ['Certified Pre-Owned','Fair','Excellent','Poor','Good'],
       required: [true, 'Please specify the condition'],
     },
     description: {
@@ -48,11 +48,14 @@ const carSchema = mongoose.Schema(
         },
       },
     ],
-    details: {
-      engine: String,
-      transmission: String,
-      color: String,
-      // More fields can be added here
+    engine: {
+      type: String,
+    },
+    transmission: {
+      type: String,
+    },
+    color: {
+      type: String,
     },
   },
   {

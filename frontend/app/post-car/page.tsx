@@ -107,14 +107,9 @@ export default function PostCarPage() {
       submitData.append("mileage", formData.mileage)
       submitData.append("condition", formData.condition)
       submitData.append("description", formData.description)
-
-      // Add details as nested object
-      const details = {
-        engine: formData.engine,
-        transmission: formData.transmission,
-        color: formData.color,
-      }
-      submitData.append("details", JSON.stringify(details))
+      submitData.append("engine", formData.engine)
+      submitData.append("transmission", formData.transmission)
+      submitData.append("color", formData.color)
 
       // Add images
       selectedFiles.forEach((file, index) => {
@@ -288,11 +283,11 @@ export default function PostCarPage() {
                     <SelectValue placeholder="Select condition" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="Excellent">Excellent</SelectItem>
-                    <SelectItem value="Very Good">Very Good</SelectItem>
-                    <SelectItem value="Good">Good</SelectItem>
-                    <SelectItem value="Fair">Fair</SelectItem>
-                    <SelectItem value="Poor">Poor</SelectItem>
+                    <SelectItem value="Certified Pre-Owned">Certified Pre-Owned</SelectItem>
+                    <SelectItem value="Excellent">Excellent - new</SelectItem>
+                    <SelectItem value="Good">Good - new</SelectItem>
+                    <SelectItem value="Fair">Fair - old</SelectItem>
+                    <SelectItem value="Poor">Poor - old</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

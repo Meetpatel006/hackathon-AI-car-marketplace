@@ -126,8 +126,8 @@ export default function BookTestDrivePage() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
+        credentials: "include", // Add this to include cookies in the request
         body: JSON.stringify(bookingData),
       })
 

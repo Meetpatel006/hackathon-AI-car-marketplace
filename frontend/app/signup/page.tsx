@@ -214,7 +214,7 @@ export default function SignUpPage() {
                 </div>
               </div>
 
-              <div className="space-y-2">
+              {/* <div className="space-y-2">
                 <Label htmlFor="role">Account Type</Label>
                 <Select value={formData.role} onValueChange={(value) => handleInputChange("role", value)}>
                   <SelectTrigger>
@@ -222,10 +222,10 @@ export default function SignUpPage() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="user">User</SelectItem>
-                    <SelectItem value="admin">Admin</SelectItem>
+                    <SelectItem value="dealer">dealer</SelectItem>
                   </SelectContent>
                 </Select>
-              </div>
+              </div> */}
 
               <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? "Creating account..." : "Create Account"}

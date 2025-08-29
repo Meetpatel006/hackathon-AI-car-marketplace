@@ -5,21 +5,28 @@ const Car = require('../models/carModel');
 // @route   POST /api/testdrives
 // @access  Private (User/Dealer)
 const bookTestDrive = async (req, res) => {
-  const { carId, date, timeSlot } = req.body;
+  // Fix the destructuring to use the correct field name 'car'
+  const { car, date, timeSlot, contactNumber, message } = req.body;
 
-  if (!carId || !date || !timeSlot) {
-    return res.status(400).json({ message: 'Please provide car ID, date, and time slot' });
+  // Add a check to ensure the user is authenticated
+  if (!req.user || !req.user._id) {
+    return res.status(401).json({ message: 'Not authorized, user not found' });
   }
 
-  const car = await Car.findById(carId);
+  // Use the corrected variable `car` in the check
+  if (!car || !date || !timeSlot || !contactNumber) {
+    return res.status(400).json({ message: 'Please provide all required fields: car ID, date, time slot, and contact number' });
+  }
 
-  if (!car) {
+  // The rest of your logic remains the same
+  const foundCar = await Car.findById(car);
+
+  if (!foundCar) {
     return res.status(404).json({ message: 'Car not found' });
   }
 
-  // Check if a similar test drive slot is already booked for this car on the same date and time
   const existingBooking = await TestDrive.findOne({
-    car: carId,
+    car: car,
     date: new Date(date),
     timeSlot: timeSlot
   });
@@ -30,14 +37,18 @@ const bookTestDrive = async (req, res) => {
 
   try {
     const testDrive = await TestDrive.create({
-      user: req.user._id,
-      car: carId,
+      user: req.user._id, // This field is correctly set here
+      car: car, // Use the corrected `car` variable
       date: new Date(date),
       timeSlot: timeSlot,
+      contactNumber: contactNumber,
+      message: message
     });
+
     res.status(201).json(testDrive);
   } catch (error) {
-    res.status(500).json({ message: 'Failed to book test drive' });
+    console.error('Failed to book test drive:', error); // Log the specific error
+    res.status(500).json({ message: 'Failed to book test drive. Check the server logs for details.' });
   }
 };
 

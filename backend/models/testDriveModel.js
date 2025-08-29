@@ -20,6 +20,16 @@ const testDriveSchema = mongoose.Schema(
       type: String,
       required: [true, 'Please select a time slot'],
     },
+    contactNumber: {
+      type: String,
+      required: [true, 'Please add a contact number'],
+      trim: true,
+    },
+    message: { // Added message field for the buyer
+      type: String,
+      trim: true,
+      maxlength: [500, 'Message cannot be more than 500 characters'],
+    },
     status: {
       type: String,
       enum: ['booked', 'confirmed', 'completed', 'canceled'],

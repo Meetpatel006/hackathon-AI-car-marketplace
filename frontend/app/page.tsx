@@ -31,7 +31,7 @@ export default function HomePage() {
 
   const fetchFeaturedCars = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/cars?limit=6")
+      const response = await fetch("http://localhost:5000/api/cars?limit=3")
       if (response.ok) {
         const data = await response.json()
         setFeaturedCars(data)

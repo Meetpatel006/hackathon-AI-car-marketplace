@@ -40,7 +40,6 @@ const generateCarDescription = async ({ make, model, year, mileage, condition, d
 
 const analyzeCarImage = async (base64Image) => {
   try {
-    // Also change this model for consistency
     const aiModel = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
     const imagePart = {
@@ -54,9 +53,21 @@ const analyzeCarImage = async (base64Image) => {
 
     const result = await aiModel.generateContent([prompt, imagePart]);
     const response = await result.response;
-    const text = response.text();
-    return JSON.parse(text);
+    let text = response.text();
 
+    // The AI often wraps the JSON in markdown. We need to remove it.
+    // 1. Find the start and end of the JSON content
+    const jsonStart = text.indexOf('{');
+    const jsonEnd = text.lastIndexOf('}');
+
+    // 2. Extract the raw JSON string
+    if (jsonStart !== -1 && jsonEnd !== -1) {
+      const jsonString = text.substring(jsonStart, jsonEnd + 1);
+      return JSON.parse(jsonString);
+    } else {
+      // If no valid JSON is found, throw an error
+      throw new Error("AI did not return a valid JSON object.");
+    }
   } catch (error) {
     console.error('Error analyzing image with AI:', error);
     throw new Error('Could not analyze car image.');

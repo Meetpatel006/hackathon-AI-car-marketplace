@@ -7,9 +7,8 @@ const { generateCarDescription , analyzeCarImage} = require('../services/aiServi
 // @route   POST /api/cars
 // @access  Private (Dealer only)
 const createCar = async (req, res) => {
-  const { make, model, year, price, mileage, condition, details } = req.body;
-
-  console.log(details);
+  console.log(req.body)
+  const { make, model, year, price, mileage, condition, engine ,transmission , color} = req.body;
 
   // The files are already uploaded to Cloudinary by the multer middleware
   if (!req.files || req.files.length === 0) {
@@ -30,7 +29,9 @@ const createCar = async (req, res) => {
       year,
       mileage,
       condition,
-      details,
+      engine,
+      transmission,
+      color
     });
 
     const newCar = await Car.create({
@@ -41,7 +42,9 @@ const createCar = async (req, res) => {
       price,
       mileage,
       condition,
-      details,
+      engine,
+      transmission,
+      color,
       description: aiGeneratedDescription,
       images,
     });
@@ -110,23 +113,31 @@ const getSellerContact = async (req, res) => {
 // @route   POST /api/cars/search-by-image
 // @access  Public
 const searchByImage = async (req, res) => {
-  const { base64Image } = req.body;
-
-  if (!base64Image) {
-    return res.status(400).json({ message: 'Please provide a base64 encoded image.' });
+  if (!req.file) {
+    return res.status(400).json({ message: 'Please upload an image file.' });
   }
 
   try {
-    // 1. Use AI to analyze the image and get car details
+    const base64Image = req.file.buffer.toString('base64');
     const aiResult = await analyzeCarImage(base64Image);
     
-    // 2. Extract key details for the database search
-    const { make, model, year } = aiResult;
+    // 1. Extract and clean the year from the AI response
+    // Use a regular expression to find the first 4-digit number.
+    let year = null;
+    if (aiResult.year) {
+      const yearMatch = aiResult.year.match(/\b(\d{4})\b/);
+      if (yearMatch && yearMatch[1]) {
+        year = parseInt(yearMatch[1]);
+      }
+    }
+    
+    // 2. Extract make and model as before
+    const { make, model } = aiResult;
 
     // 3. Construct a database query to find similar cars
     const query = {};
     if (make) {
-      query.make = { $regex: new RegExp(make, 'i') }; // Case-insensitive search
+      query.make = { $regex: new RegExp(make, 'i') };
     }
     if (model) {
       query.model = { $regex: new RegExp(model, 'i') };
@@ -156,5 +167,5 @@ module.exports = {
   getCars,
   getCarById,
   getSellerContact,
-  searchByImage, // Export the new function
+  searchByImage,
 };

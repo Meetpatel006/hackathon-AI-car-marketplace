@@ -35,11 +35,9 @@ interface CarDetails {
     url: string
     public_id: string
   }>
-  details?: {
-    engine?: string
-    transmission?: string
-    color?: string
-  }
+  engine?: string
+  transmission?: string
+  color?: string
   createdAt: string
   updatedAt: string
 }
@@ -54,7 +52,8 @@ interface UserProfile {
 interface SellerContact {
   name: string
   email: string
-  phone?: string
+  phoneNumber?: string
+  address: object
   message?: string
 }
 
@@ -431,17 +430,17 @@ export default function CarDetailsPage() {
                   <div className="flex items-center space-x-2">
                     <Settings className="h-4 w-4 text-muted-foreground" />
                     <span className="text-sm text-muted-foreground">Engine:</span>
-                    <span className="text-sm font-medium">{car.details?.engine || "Not specified"}</span>
+                    <span className="text-sm font-medium">{car.engine || "Not specified"}</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Gauge className="h-4 w-4 text-muted-foreground" />
                     <span className="text-sm text-muted-foreground">Transmission:</span>
-                    <span className="text-sm font-medium">{car.details?.transmission || "Not specified"}</span>
+                    <span className="text-sm font-medium">{car.transmission || "Not specified"}</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Palette className="h-4 w-4 text-muted-foreground" />
                     <span className="text-sm text-muted-foreground">Color:</span>
-                    <span className="text-sm font-medium">{car.details?.color || "Not specified"}</span>
+                    <span className="text-sm font-medium">{car.color || "Not specified"}</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Gauge className="h-4 w-4 text-muted-foreground" />
@@ -488,29 +487,80 @@ export default function CarDetailsPage() {
                 )}
 
                 {sellerContact && (
-                  <Card className="mt-4">
-                    <CardHeader>
-                      <CardTitle className="text-lg">Seller Contact Information</CardTitle>
+                  <Card className="mt-4 border-primary/20">
+                    <CardHeader className="border-b">
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <CheckCircle className="h-5 w-5 text-primary" />
+                        Seller Information
+                      </CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-2">
-                      <div>
-                        <span className="font-medium">Name: </span>
-                        <span>{sellerContact.name}</span>
-                      </div>
-                      <div>
-                        <span className="font-medium">Email: </span>
-                        <span>{sellerContact.email}</span>
-                      </div>
-                      {sellerContact.phone && (
-                        <div>
-                          <span className="font-medium">Phone: </span>
-                          <span>{sellerContact.phone}</span>
+                    <CardContent className="pt-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {/* Personal Information */}
+                        <div className="space-y-3">
+                          <div className="space-y-1">
+                            <Label className="text-muted-foreground">Name</Label>
+                            <div className="font-medium">{sellerContact.name}</div>
+                          </div>
+                          <div className="space-y-1">
+                            <Label className="text-muted-foreground">Email</Label>
+                            <div className="font-medium">{sellerContact.email}</div>
+                          </div>
+                          {sellerContact.phoneNumber && (
+                            <div className="space-y-1">
+                              <Label className="text-muted-foreground">Phone</Label>
+                              <div className="font-medium">{sellerContact.phoneNumber}</div>
+                            </div>
+                          )}
                         </div>
-                      )}
+
+                        {/* Address Information */}
+                        <div className="space-y-3">
+                          <h4 className="font-medium text-sm text-muted-foreground">Address</h4>
+                          <div className="space-y-2">
+                            {sellerContact.address?.street && (
+                              <div className="text-sm">
+                                <span className="text-muted-foreground">Street:</span>{" "}
+                                <span className="font-medium">{sellerContact.address.street}</span>
+                              </div>
+                            )}
+                            <div className="grid grid-cols-2 gap-2">
+                              {sellerContact.address?.city && (
+                                <div className="text-sm">
+                                  <span className="text-muted-foreground">City:</span>{" "}
+                                  <span className="font-medium">{sellerContact.address.city}</span>
+                                </div>
+                              )}
+                              {sellerContact.address?.state && (
+                                <div className="text-sm">
+                                  <span className="text-muted-foreground">State:</span>{" "}
+                                  <span className="font-medium">{sellerContact.address.state}</span>
+                                </div>
+                              )}
+                            </div>
+                            <div className="grid grid-cols-2 gap-2">
+                              {sellerContact.address?.zip && (
+                                <div className="text-sm">
+                                  <span className="text-muted-foreground">ZIP:</span>{" "}
+                                  <span className="font-medium">{sellerContact.address.zip}</span>
+                                </div>
+                              )}
+                              {sellerContact.address?.country && (
+                                <div className="text-sm">
+                                  <span className="text-muted-foreground">Country:</span>{" "}
+                                  <span className="font-medium">{sellerContact.address.country}</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Message Section */}
                       {sellerContact.message && (
-                        <div>
-                          <span className="font-medium">Message: </span>
-                          <span className="text-muted-foreground">{sellerContact.message}</span>
+                        <div className="mt-4 pt-4 border-t">
+                          <Label className="text-muted-foreground">Message</Label>
+                          <div className="mt-1 text-sm">{sellerContact.message}</div>
                         </div>
                       )}
                     </CardContent>
