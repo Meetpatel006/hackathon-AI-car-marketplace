@@ -202,15 +202,15 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* Analytics Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium">Total Users</CardTitle>
               <Users className="h-4 w-4 text-gray-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{analytics?.totalUsers ?? 0}</div>
-              <p className="text-xs text-gray-500">+12% from last month</p>
+              <div className="text-2xl font-bold">{analytics?.totalUsers || 0}</div>
+              <p className="text-xs text-gray-500">Active platform users</p>
             </CardContent>
           </Card>
           <Card>
@@ -219,8 +219,8 @@ export default function AdminDashboardPage() {
               <Car className="h-4 w-4 text-gray-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{analytics?.totalCarListings ?? 0}</div>
-              <p className="text-xs text-gray-500">+8% from last month</p>
+              <div className="text-2xl font-bold">{analytics?.totalCarListings || 0}</div>
+              <p className="text-xs text-gray-500">Cars currently listed</p>
             </CardContent>
           </Card>
           <Card>
@@ -229,8 +229,8 @@ export default function AdminDashboardPage() {
               <TrendingUp className="h-4 w-4 text-gray-500" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{analytics?.totalTestDrives ?? 0}</div>
-              <p className="text-xs text-gray-500">+5 test drives this week</p>
+              <div className="text-2xl font-bold">{analytics?.totalTestDrives || 0}</div>
+              <p className="text-xs text-gray-500">Total test drives booked</p>
             </CardContent>
           </Card>
         </div>
